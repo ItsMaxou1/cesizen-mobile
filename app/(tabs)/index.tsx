@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { useAuth } from '../../src/context/useAuth'
+import { useRouter } from 'expo-router'
 
 interface Exercice {
   id: number
@@ -21,6 +22,7 @@ export default function IndexPage() {
   const { user, token } = useAuth()
   const [exercices, setExercices] = useState<Exercice[]>([])
   const [contenus, setContenus] = useState<Contenu[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     const load = async () => {
@@ -45,7 +47,7 @@ export default function IndexPage() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Exercices de respiration :</Text>
         {exercices.map(ex => (
-          <TouchableOpacity key={ex.id} style={styles.card}>
+          <TouchableOpacity key={ex.id} style={styles.card} onPress={() => router.push(`/exercice/${ex.id}`)}>
             <Text style={styles.cardTitle}>{ex.titre}</Text>
             <Text style={styles.cardSub}>{ex.duree_secondes}s • {ex.categorie.nom}</Text>
           </TouchableOpacity>
@@ -55,7 +57,7 @@ export default function IndexPage() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Contenus informatifs :</Text>
         {contenus.map(co => (
-          <TouchableOpacity key={co.id} style={styles.card}>
+          <TouchableOpacity key={co.id} style={styles.card} onPress={() => router.push(`/contenu/${co.id}`)}>
             <Text style={styles.cardTitle}>{co.titre}</Text>
             <Text style={styles.cardSub}>{co.categorie.nom}</Text>
           </TouchableOpacity>
