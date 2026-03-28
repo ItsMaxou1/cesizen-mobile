@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "CESIZen",
+    "slug": "cesizen-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "cesizenmobile",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#2eaf8a"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
