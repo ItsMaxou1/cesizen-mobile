@@ -14,7 +14,7 @@ export default function RegisterPage() {
 
   const handleRegister = async () => {
     try {
-      const res = await fetch('http://10.0.2.2:3001/api/auth/register', {
+      const res = await fetch('http://10.176.137.120:3001/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nom, prenom, email, mot_de_passe: motDePasse })

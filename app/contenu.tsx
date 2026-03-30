@@ -14,15 +14,15 @@ export default function ContenuDetailPage() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch(`http://10.0.2.2:3001/api/contenus/${id}`)
+      const res = await fetch(`http://10.176.137.120:3001/api/contenus/${id}`)
       const data = await res.json()
       setContenu(data)
 
-      const resLikes = await fetch(`http://10.0.2.2:3001/api/likes/contenu/${id}`)
+      const resLikes = await fetch(`http://10.176.137.120:3001/api/likes/contenu/${id}`)
       const dataLikes = await resLikes.json()
       setLikes(dataLikes.count)
 
-      const resCom = await fetch(`http://10.0.2.2:3001/api/commentaires/contenu/${id}`)
+      const resCom = await fetch(`http://10.176.137.120:3001/api/commentaires/contenu/${id}`)
       const dataCom = await resCom.json()
       setCommentaires(dataCom)
     }
@@ -31,25 +31,25 @@ export default function ContenuDetailPage() {
 
   const handleLike = async () => {
     if (!user) return
-    await fetch('http://10.0.2.2:3001/api/likes/toggle', {
+    await fetch('http://10.176.137.120:3001/api/likes/toggle', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ contenuId: Number(id) })
     })
-    const res = await fetch(`http://10.0.2.2:3001/api/likes/contenu/${id}`)
+    const res = await fetch(`http://10.176.137.120:3001/api/likes/contenu/${id}`)
     const data = await res.json()
     setLikes(data.count)
   }
 
   const handleCommentaire = async () => {
     if (!user || !nouveauCommentaire) return
-    await fetch('http://10.0.2.2:3001/api/commentaires', {
+    await fetch('http://10.176.137.120:3001/api/commentaires', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ contenu: nouveauCommentaire, contenuId: Number(id) })
     })
     setNouveauCommentaire('')
-    const res = await fetch(`http://10.0.2.2:3001/api/commentaires/contenu/${id}`)
+    const res = await fetch(`http://10.176.137.120:3001/api/commentaires/contenu/${id}`)
     const data = await res.json()
     setCommentaires(data)
   }

@@ -26,11 +26,11 @@ export default function IndexPage() {
 
   useEffect(() => {
     const load = async () => {
-      const resEx = await fetch('http://10.0.2.2:3001/api/exercices')
+      const resEx = await fetch('http://10.176.137.120:3001/api/exercices')
       const dataEx = await resEx.json()
       setExercices(dataEx.slice(0, 3))
 
-      const resCo = await fetch('http://10.0.2.2:3001/api/contenus')
+      const resCo = await fetch('http://10.176.137.120:3001/api/contenus')
       const dataCo = await resCo.json()
       setContenus(dataCo.slice(0, 3))
     }

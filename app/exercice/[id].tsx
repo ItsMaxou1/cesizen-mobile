@@ -25,15 +25,15 @@ export default function ExerciceDetailPage() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch(`http://10.0.2.2:3001/api/exercices/${id}`)
+      const res = await fetch(`http://10.176.137.120:3001/api/exercices/${id}`)
       const data = await res.json()
       setExercice(data)
 
-      const resLikes = await fetch(`http://10.0.2.2:3001/api/likes/exercice/${id}`)
+      const resLikes = await fetch(`http://10.176.137.120:3001/api/likes/exercice/${id}`)
       const dataLikes = await resLikes.json()
       setLikes(dataLikes.count)
 
-      const resCom = await fetch(`http://10.0.2.2:3001/api/commentaires/exercice/${id}`)
+      const resCom = await fetch(`http://10.176.137.120:3001/api/commentaires/exercice/${id}`)
       const dataCom = await resCom.json()
       setCommentaires(dataCom)
     }
@@ -42,19 +42,19 @@ export default function ExerciceDetailPage() {
 
   const handleLike = async () => {
     if (!user) return
-    await fetch('http://10.0.2.2:3001/api/likes/toggle', {
+    await fetch('http://10.176.137.120:3001/api/likes/toggle', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ exerciceId: Number(id) })
     })
-    const res = await fetch(`http://10.0.2.2:3001/api/likes/exercice/${id}`)
+    const res = await fetch(`http://10.176.137.120:3001/api/likes/exercice/${id}`)
     const data = await res.json()
     setLikes(data.count)
   }
 
   const handleFavori = async () => {
     if (!user) return
-    await fetch('http://10.0.2.2:3001/api/favoris/toggle', {
+    await fetch('http://10.176.137.120:3001/api/favoris/toggle', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ exerciceId: Number(id) })
@@ -63,7 +63,7 @@ export default function ExerciceDetailPage() {
 
   const handleLancer = async () => {
     if (user) {
-      await fetch('http://10.0.2.2:3001/api/historique', {
+      await fetch('http://10.176.137.120:3001/api/historique', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ exerciceId: Number(id) })

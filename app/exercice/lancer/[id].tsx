@@ -22,7 +22,7 @@ export default function LancerExercicePage() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch(`http://10.0.2.2:3001/api/exercices/${id}`)
+      const res = await fetch(`http://10.176.137.120:3001/api/exercices/${id}`)
       const data = await res.json()
       setExercice(data)
       setCompteur(data.inspiration)

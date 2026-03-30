@@ -21,7 +21,7 @@ export default function ExercicesPage() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch('http://10.0.2.2:3001/api/exercices')
+      const res = await fetch('http://10.176.137.120:3001/api/exercices')
       const data = await res.json()
       setExercices(data)
       const cats = ['Tous', ...new Set<string>(data.map((ex: Exercice) => ex.categorie.nom))]

@@ -12,7 +12,7 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch('http://10.0.2.2:3001/api/auth/login', {
+      const res = await fetch('http://10.176.137.120:3001/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, mot_de_passe: motDePasse })

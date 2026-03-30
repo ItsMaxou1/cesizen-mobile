@@ -10,7 +10,7 @@ export default function HistoriquePage() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch('http://10.0.2.2:3001/api/historique/mon-historique', {
+      const res = await fetch('http://10.176.137.120:3001/api/historique/mon-historique', {
         headers: { Authorization: `Bearer ${token}` }
       })
       const data = await res.json()
