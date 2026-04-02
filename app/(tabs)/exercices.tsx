@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2eaf8a',
   },
   filtreText: {
-    color: '#2eaf8a',
+    color: '#1d9470', // RGAA : contraste 3.8:1 sur fond clair
     fontSize: 14,
   },
   filtreTextActif: {

@@ -139,14 +139,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   retourText: {
-    color: '#2eaf8a',
+    color: '#1d9470', // RGAA : contraste 3.8:1 sur fond clair
     fontSize: 16,
   },
   header: {
     marginBottom: 16,
   },
   categorie: {
-    color: '#2eaf8a',
+    color: '#1d9470', // RGAA : contraste 3.8:1 sur fond clair
     fontSize: 13,
     marginBottom: 6,
   },

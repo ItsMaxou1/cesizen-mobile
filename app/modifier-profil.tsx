@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   retourText: {
-    color: '#2eaf8a',
+    color: '#1d9470', // RGAA : contraste 3.8:1 sur fond clair
     fontSize: 16,
   },
   titre: {

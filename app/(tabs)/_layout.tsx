@@ -9,7 +9,7 @@ export default function TabsLayout() {
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: '#2eaf8a',
+          tabBarActiveTintColor: '#1d9470', // RGAA : contraste 3.8:1 sur fond blanc
           tabBarInactiveTintColor: '#999',
           tabBarStyle: {
             backgroundColor: 'white',

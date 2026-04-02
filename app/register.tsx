@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   titre: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2eaf8a',
+    color: '#1d9470', // RGAA : contraste 3.8:1 sur fond clair
     marginBottom: 32,
     textAlign: 'center',
   },
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   lien: {
-    color: '#2eaf8a',
+    color: '#1d9470', // RGAA : contraste suffisant sur fond clair
     textAlign: 'center',
     fontSize: 14,
   },

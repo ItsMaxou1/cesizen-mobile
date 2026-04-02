@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     borderColor: '#2eaf8a',
   },
   btnSecondaireText: {
-    color: '#2eaf8a',
+    color: '#1d9470', // RGAA : contraste 3.8:1 sur fond clair
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   voirPlus: {
-    color: '#2eaf8a',
+    color: '#1d9470', // RGAA : contraste 3.8:1 sur fond clair
     fontSize: 14,
     textAlign: 'center',
     marginTop: 8,
