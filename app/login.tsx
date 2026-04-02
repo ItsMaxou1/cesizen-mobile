@@ -54,14 +54,14 @@ export default function LoginPage() {
           value={motDePasse}
           onChangeText={setMotDePasse}
           secureTextEntry={!showPassword}
+          accessibilityLabel='Saisissez votre mot de passe'
+        />
         {/* RGAA : accessibilityRole + accessibilityLabel pour signaler que c'est un bouton avec une icône */}
         <TouchableOpacity
           style={styles.togglePassword}
           onPress={() => setShowPassword(!showPassword)}
           accessibilityRole='button'
-          accessibilityLabel={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'
-          style={styles.togglePassword}
-          onPress={() => setShowPassword(!showPassword)}
+          accessibilityLabel={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
         >
           <Ionicons
             name={showPassword ? 'eye' : 'eye-off'}
