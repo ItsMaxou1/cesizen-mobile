@@ -62,17 +62,35 @@ export default function ProfilPage() {
         <Text style={styles.valeur}>{user.email}</Text>
       </View>
 
-      <TouchableOpacity style={styles.actionBtn} onPress={() => router.push('/modifier-email')}>
+      {/* RGAA : accessibilityRole + accessibilityLabel pour les boutons d'action avec icônes */}
+      <TouchableOpacity 
+        style={styles.actionBtn} 
+        onPress={() => router.push('/modifier-email')}
+        accessibilityRole='button'
+        accessibilityLabel='Modifier votre adresse email'
+      >
         <Ionicons name='mail-outline' size={20} color='#2d2d2d' />
         <Text style={styles.actionBtnText}>Modifier l'email</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.actionBtn} onPress={() => router.push('/modifier-password')}>
+      {/* RGAA : accessibilityRole + accessibilityLabel pour le bouton modifier mot de passe */}
+      <TouchableOpacity 
+        style={styles.actionBtn} 
+        onPress={() => router.push('/modifier-password')}
+        accessibilityRole='button'
+        accessibilityLabel='Modifier votre mot de passe'
+      >
         <Ionicons name='lock-closed-outline' size={20} color='#2d2d2d' />
         <Text style={styles.actionBtnText}>Modifier le mot de passe</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.btnDanger} onPress={handleLogout}>
+      {/* RGAA : accessibilityRole + accessibilityLabel pour le bouton de déconnexion */}
+      <TouchableOpacity 
+        style={styles.btnDanger} 
+        onPress={handleLogout}
+        accessibilityRole='button'
+        accessibilityLabel='Se déconnecter de votre compte'
+      >
         <Ionicons name='log-out-outline' size={20} color='white' />
         <Text style={styles.btnDangerText}>Se déconnecter</Text>
       </TouchableOpacity>
