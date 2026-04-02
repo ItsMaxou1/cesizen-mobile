@@ -36,7 +36,6 @@ export default function LoginPage() {
     <View style={styles.container}>
       <Text style={styles.titre}>Connexion</Text>
       {erreur ? <Text style={styles.erreur}>{erreur}</Text> : null}
-      {/* RGAA : accessibilityLabel permet aux lecteurs d'écran de savoir à quoi sert ce champ */}
       <TextInput
         style={styles.input}
         placeholder='Email'
@@ -44,24 +43,18 @@ export default function LoginPage() {
         onChangeText={setEmail}
         keyboardType='email-address'
         autoCapitalize='none'
-        accessibilityLabel='Saisissez votre adresse email'
       />
       <View style={styles.passwordContainer}>
-        {/* RGAA : accessibilityLabel pour le champ mot de passe */}
         <TextInput
           style={styles.input}
           placeholder='Mot de passe'
           value={motDePasse}
           onChangeText={setMotDePasse}
           secureTextEntry={!showPassword}
-          accessibilityLabel='Saisissez votre mot de passe'
         />
-        {/* RGAA : accessibilityRole + accessibilityLabel pour signaler que c'est un bouton avec une icône */}
         <TouchableOpacity
           style={styles.togglePassword}
           onPress={() => setShowPassword(!showPassword)}
-          accessibilityRole='button'
-          accessibilityLabel={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
         >
           <Ionicons
             name={showPassword ? 'eye' : 'eye-off'}
