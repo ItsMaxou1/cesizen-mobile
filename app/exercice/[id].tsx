@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
 import { useAuth } from '../../src/context/useAuth'
+import { API_URL } from '../../src/config'
 
 interface Exercice {
   id: number
@@ -20,67 +22,86 @@ export default function ExerciceDetailPage() {
   const router = useRouter()
   const [exercice, setExercice] = useState<Exercice | null>(null)
   const [likes, setLikes] = useState(0)
+  const [isFavori, setIsFavori] = useState(false)
   const [commentaires, setCommentaires] = useState<any[]>([])
   const [nouveauCommentaire, setNouveauCommentaire] = useState('')
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch(`http://10.176.137.120:3001/api/exercices/${id}`)
+      const res = await fetch(`${API_URL}/api/exercices/${id}`)
       const data = await res.json()
       setExercice(data)
 
-      const resLikes = await fetch(`http://10.176.137.120:3001/api/likes/exercice/${id}`)
+      const resLikes = await fetch(`${API_URL}/api/likes/exercice/${id}`)
       const dataLikes = await resLikes.json()
       setLikes(dataLikes.count)
 
-      const resCom = await fetch(`http://10.176.137.120:3001/api/commentaires/exercice/${id}`)
+      const resCom = await fetch(`${API_URL}/api/commentaires/exercice/${id}`)
       const dataCom = await resCom.json()
       setCommentaires(dataCom)
+
+      if (user && token) {
+        const resFav = await fetch(`${API_URL}/api/favoris/mes-favoris`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        const dataFav = await resFav.json()
+        setIsFavori(dataFav.some((f: any) => f.exerciceId === Number(id)))
+      }
     }
     load()
   }, [id])
 
   const handleLike = async () => {
-    if (!user) return
-    await fetch('http://10.176.137.120:3001/api/likes/toggle', {
+    if (!user) {
+      router.push('/login')
+      return
+    }
+    await fetch(`${API_URL}/api/likes/toggle`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ exerciceId: Number(id) })
     })
-    const res = await fetch(`http://10.176.137.120:3001/api/likes/exercice/${id}`)
+    const res = await fetch(`${API_URL}/api/likes/exercice/${id}`)
     const data = await res.json()
     setLikes(data.count)
   }
 
   const handleFavori = async () => {
-    if (!user) return
-    await fetch('http://10.176.137.120:3001/api/favoris/toggle', {
+    if (!user) {
+      router.push('/login')
+      return
+    }
+    await fetch(`${API_URL}/api/favoris/toggle`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ exerciceId: Number(id) })
     })
+    setIsFavori(prev => !prev)
   }
 
   const handleLancer = async () => {
-    if (user) {
-      await fetch('http://10.176.137.120:3001/api/historique', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ exerciceId: Number(id) })
-      })
+    if (!user) {
+      router.push('/login')
+      return
     }
+
+    await fetch(`${API_URL}/api/historique`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ exerciceId: Number(id) })
+    })
     router.push(`/exercice/lancer/${id}`)
   }
 
   const handleCommentaire = async () => {
     if (!user || !nouveauCommentaire) return
-    await fetch('http://10.0.2.2:3001/api/commentaires', {
+    await fetch(`${API_URL}/api/commentaires`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ contenu: nouveauCommentaire, exerciceId: Number(id) })
     })
     setNouveauCommentaire('')
-    const res = await fetch(`http://10.0.2.2:3001/api/commentaires/exercice/${id}`)
+    const res = await fetch(`${API_URL}/api/commentaires/exercice/${id}`)
     const data = await res.json()
     setCommentaires(data)
   }
@@ -93,50 +114,67 @@ export default function ExerciceDetailPage() {
         <Text style={styles.retourText}>← Retour</Text>
       </TouchableOpacity>
 
-      <Text style={styles.titre}>{exercice.titre}</Text>
-      <Text style={styles.categorie}>{exercice.categorie.nom}</Text>
+      <View style={styles.header}>
+        <View style={styles.headerInfo}>
+          <View style={styles.metaRow}>
+            <Ionicons name='time-outline' size={14} color='#666' />
+            <Text style={styles.metaText}>{exercice.duree_secondes}s</Text>
+            <Text style={styles.metaText}>{exercice.categorie.nom}</Text>
+          </View>
+          <Text style={styles.titre}>{exercice.titre}</Text>
+        </View>
+        <TouchableOpacity onPress={handleFavori}>
+          <Ionicons
+            name={isFavori ? 'star' : 'star-outline'}
+            size={28}
+            color={isFavori ? '#2d2d2d' : '#999'}
+          />
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.description}>{exercice.description}</Text>
 
-      <View style={styles.infos}>
-        <Text style={styles.info}>🕐 {exercice.duree_secondes}s</Text>
-        <Text style={styles.info}>↑ {exercice.inspiration}s</Text>
-        <Text style={styles.info}>⏸ {exercice.apnee}s</Text>
-        <Text style={styles.info}>↓ {exercice.expiration}s</Text>
-      </View>
-
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.actionBtn} onPress={handleLike}>
-          <Text style={styles.actionText}>❤️ {likes}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.actionBtn} onPress={handleFavori}>
-          <Text style={styles.actionText}>⭐ Favori</Text>
+        <TouchableOpacity style={styles.lancerBtn} onPress={handleLancer}>
+          <Text style={styles.lancerText}>Lancer l'exercice</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.lancerBtn} onPress={handleLancer}>
-        <Text style={styles.lancerText}>Lancer l'exercice</Text>
+      <TouchableOpacity style={styles.likeRow} onPress={handleLike}>
+        <Ionicons
+          name={user ? 'heart' : 'heart-outline'}
+          size={20}
+          color='#e8405a'
+        />
+        <Text style={styles.likeText}>{likes} personnes aiment cet exercice</Text>
       </TouchableOpacity>
 
-      <Text style={styles.commentairesTitre}>Commentaires</Text>
+      <Text style={styles.commentairesTitre}>Commentaires ({commentaires.length})</Text>
       {commentaires.map(c => (
         <View key={c.id} style={styles.commentaire}>
-          <Text style={styles.commentaireAuteur}>{c.utilisateur.prenom} {c.utilisateur.nom}</Text>
+          <View style={styles.commentaireHeader}>
+            <Text style={styles.commentaireAuteur}>{c.utilisateur.prenom} {c.utilisateur.nom}</Text>
+            <Text style={styles.commentaireDate}>{new Date(c.createdAt).toLocaleDateString()}</Text>
+          </View>
           <Text style={styles.commentaireContenu}>{c.contenu}</Text>
         </View>
       ))}
 
       {user && (
         <View style={styles.nouveauCommentaire}>
-          <TextInput
-            style={styles.input}
-            placeholder='Ajouter un commentaire...'
-            value={nouveauCommentaire}
-            onChangeText={setNouveauCommentaire}
-            multiline
-          />
-          <TouchableOpacity style={styles.btn} onPress={handleCommentaire}>
-            <Text style={styles.btnText}>Envoyer</Text>
-          </TouchableOpacity>
+          <Text style={styles.nouveauCommentaireTitre}>Ajouter un commentaire</Text>
+          <View style={styles.inputRow}>
+            <TextInput
+              style={styles.input}
+              placeholder='Votre commentaire...'
+              value={nouveauCommentaire}
+              onChangeText={setNouveauCommentaire}
+              multiline
+            />
+            <TouchableOpacity style={styles.envoyerBtn} onPress={handleCommentaire}>
+              <Text style={styles.envoyerText}>Envoyer</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </ScrollView>
@@ -151,66 +189,71 @@ const styles = StyleSheet.create({
   },
   retour: {
     marginBottom: 16,
+    paddingTop: 8,
   },
   retourText: {
     color: '#2eaf8a',
     fontSize: 16,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  headerInfo: {
+    flex: 1,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 8,
+  },
+  metaText: {
+    fontSize: 13,
+    color: '#666',
+  },
   titre: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#2d2d2d',
-    marginBottom: 8,
-  },
-  categorie: {
-    color: '#2eaf8a',
-    fontSize: 14,
-    marginBottom: 16,
   },
   description: {
     fontSize: 15,
     color: '#444',
     lineHeight: 22,
     marginBottom: 24,
-  },
-  infos: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-    marginBottom: 24,
-  },
-  info: {
     backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 8,
-    fontSize: 14,
+    padding: 16,
+    borderRadius: 12,
   },
   actions: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 24,
-  },
-  actionBtn: {
-    backgroundColor: 'white',
-    padding: 12,
-    borderRadius: 8,
-    flex: 1,
-    alignItems: 'center',
-  },
-  actionText: {
-    fontSize: 16,
+    marginBottom: 16,
   },
   lancerBtn: {
     backgroundColor: '#2eaf8a',
     padding: 16,
     borderRadius: 12,
     alignItems: 'center',
-    marginBottom: 24,
   },
   lancerText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  likeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'white',
+    padding: 14,
+    borderRadius: 12,
+    marginBottom: 24,
+  },
+  likeText: {
+    fontSize: 14,
+    color: '#666',
   },
   commentairesTitre: {
     fontSize: 18,
@@ -220,42 +263,61 @@ const styles = StyleSheet.create({
   },
   commentaire: {
     backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 12,
+    borderRadius: 12,
+    padding: 14,
     marginBottom: 8,
+  },
+  commentaireHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 6,
   },
   commentaireAuteur: {
     fontWeight: 'bold',
-    color: '#2eaf8a',
-    marginBottom: 4,
+    color: '#2d2d2d',
+    fontSize: 14,
+  },
+  commentaireDate: {
+    fontSize: 12,
+    color: '#999',
   },
   commentaireContenu: {
     fontSize: 14,
     color: '#444',
   },
   nouveauCommentaire: {
-    marginTop: 16,
+    marginTop: 8,
     marginBottom: 32,
   },
+  nouveauCommentaireTitre: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2d2d2d',
+    marginBottom: 12,
+  },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 8,
+  },
   input: {
+    flex: 1,
     backgroundColor: 'white',
     padding: 12,
-    borderRadius: 8,
-    marginBottom: 8,
+    borderRadius: 12,
     fontSize: 14,
     borderWidth: 1,
     borderColor: '#d0d8d4',
-    minHeight: 80,
+    minHeight: 50,
   },
-  btn: {
+  envoyerBtn: {
     backgroundColor: '#2eaf8a',
     padding: 14,
-    borderRadius: 10,
-    alignItems: 'center',
+    borderRadius: 12,
   },
-  btnText: {
+  envoyerText: {
     color: 'white',
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: 'bold',
   },
 })

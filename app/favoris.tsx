@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useAuth } from '../src/context/useAuth'
+import { API_URL } from '../src/config'
 
 export default function FavorisPage() {
   const { token } = useAuth()
@@ -10,7 +11,7 @@ export default function FavorisPage() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch('http://10.176.137.120:3001/api/favoris/mes-favoris', {
+      const res = await fetch(`${API_URL}/api/favoris/mes-favoris`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       const data = await res.json()

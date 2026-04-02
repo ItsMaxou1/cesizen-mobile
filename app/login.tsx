@@ -2,17 +2,20 @@ import { useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useAuth } from '../src/context/useAuth'
+import { API_URL } from '../src/config'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [motDePasse, setMotDePasse] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [erreur, setErreur] = useState('')
   const { login } = useAuth()
   const router = useRouter()
 
   const handleLogin = async () => {
     try {
-      const res = await fetch('http://10.176.137.120:3001/api/auth/login', {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, mot_de_passe: motDePasse })
@@ -41,13 +44,25 @@ export default function LoginPage() {
         keyboardType='email-address'
         autoCapitalize='none'
       />
-      <TextInput
-        style={styles.input}
-        placeholder='Mot de passe'
-        value={motDePasse}
-        onChangeText={setMotDePasse}
-        secureTextEntry
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder='Mot de passe'
+          value={motDePasse}
+          onChangeText={setMotDePasse}
+          secureTextEntry={!showPassword}
+        />
+        <TouchableOpacity
+          style={styles.togglePassword}
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          <Ionicons
+            name={showPassword ? 'eye' : 'eye-off'}
+            size={20}
+            color='#2eaf8a'
+          />
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity style={styles.btn} onPress={handleLogin}>
         <Text style={styles.btnText}>Se connecter</Text>
       </TouchableOpacity>
@@ -85,6 +100,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     borderWidth: 1,
     borderColor: '#d0d8d4',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  togglePassword: {
+    position: 'absolute',
+    right: 14,
+    padding: 8,
   },
   btn: {
     backgroundColor: '#2eaf8a',

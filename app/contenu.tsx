@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useAuth } from './../src/context/useAuth'
+import { API_URL } from './../src/config'
 
 export default function ContenuDetailPage() {
   const { id } = useLocalSearchParams()
@@ -14,15 +15,15 @@ export default function ContenuDetailPage() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch(`http://10.176.137.120:3001/api/contenus/${id}`)
+      const res = await fetch(`${API_URL}/api/contenus/${id}`)
       const data = await res.json()
       setContenu(data)
 
-      const resLikes = await fetch(`http://10.176.137.120:3001/api/likes/contenu/${id}`)
+      const resLikes = await fetch(`${API_URL}/api/likes/contenu/${id}`)
       const dataLikes = await resLikes.json()
       setLikes(dataLikes.count)
 
-      const resCom = await fetch(`http://10.176.137.120:3001/api/commentaires/contenu/${id}`)
+      const resCom = await fetch(`${API_URL}/api/commentaires/contenu/${id}`)
       const dataCom = await resCom.json()
       setCommentaires(dataCom)
     }
@@ -31,25 +32,25 @@ export default function ContenuDetailPage() {
 
   const handleLike = async () => {
     if (!user) return
-    await fetch('http://10.176.137.120:3001/api/likes/toggle', {
+    await fetch(`${API_URL}/api/likes/toggle`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ contenuId: Number(id) })
     })
-    const res = await fetch(`http://10.176.137.120:3001/api/likes/contenu/${id}`)
+    const res = await fetch(`${API_URL}/api/likes/contenu/${id}`)
     const data = await res.json()
     setLikes(data.count)
   }
 
   const handleCommentaire = async () => {
     if (!user || !nouveauCommentaire) return
-    await fetch('http://10.176.137.120:3001/api/commentaires', {
+    await fetch(`${API_URL}/api/commentaires`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ contenu: nouveauCommentaire, contenuId: Number(id) })
     })
     setNouveauCommentaire('')
-    const res = await fetch(`http://10.176.137.120:3001/api/commentaires/contenu/${id}`)
+    const res = await fetch(`${API_URL}/api/commentaires/contenu/${id}`)
     const data = await res.json()
     setCommentaires(data)
   }

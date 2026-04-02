@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import { Ionicons } from '@expo/vector-icons'
+import { API_URL } from '../../src/config'
 
 export default function TabsLayout() {
   return (
@@ -20,27 +21,21 @@ export default function TabsLayout() {
           name='index'
           options={{
             title: 'Accueil',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" size={size} color={color} />
-            ),
+            tabBarIcon: ({ color, size }) => <Ionicons name='home-outline' size={size} color={color} />
           }}
         />
         <Tabs.Screen
           name='exercices'
           options={{
             title: 'Exercices',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="dumbbell" size={size} color={color} />
-            ),
+            tabBarIcon: ({ color, size }) => <Ionicons name='fitness-outline' size={size} color={color} />
           }}
         />
         <Tabs.Screen
           name='profil'
           options={{
             title: 'Profil',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="account" size={size} color={color} />
-            ),
+            tabBarIcon: ({ color, size }) => <Ionicons name='person-outline' size={size} color={color} />
           }}
         />
       </Tabs>

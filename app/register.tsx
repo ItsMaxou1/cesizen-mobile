@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useAuth } from '../src/context/useAuth'
+import { API_URL } from '../src/config'
 
 export default function RegisterPage() {
   const [nom, setNom] = useState('')
@@ -14,7 +15,7 @@ export default function RegisterPage() {
 
   const handleRegister = async () => {
     try {
-      const res = await fetch('http://10.176.137.120:3001/api/auth/register', {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nom, prenom, email, mot_de_passe: motDePasse })

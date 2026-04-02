@@ -5,12 +5,9 @@ import { useAuth } from '../src/context/useAuth'
 import { API_URL } from '../src/config'
 import { Ionicons } from '@expo/vector-icons'
 
-export default function ModifierProfilPage() {
-  const { token, user, login } = useAuth()
+export default function ModifierPasswordPage() {
+  const { token, login, user } = useAuth()
   const router = useRouter()
-  const [nom, setNom] = useState(user?.nom || '')
-  const [prenom, setPrenom] = useState(user?.prenom || '')
-  const [email, setEmail] = useState(user?.email || '')
   const [motDePasse, setMotDePasse] = useState('')
   const [confirmation, setConfirmation] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -18,19 +15,20 @@ export default function ModifierProfilPage() {
   const [erreur, setErreur] = useState('')
 
   const handleSave = async () => {
-    if (motDePasse && motDePasse !== confirmation) {
+    if (!motDePasse) {
+      setErreur('Veuillez entrer un mot de passe')
+      return
+    }
+    if (motDePasse !== confirmation) {
       setErreur('Les mots de passe ne correspondent pas')
       return
     }
-
-    const body: any = { nom, prenom, email }
-    if (motDePasse) body.mot_de_passe = motDePasse
 
     try {
       const res = await fetch(`${API_URL}/api/users/profil`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ mot_de_passe: motDePasse })
       })
       const data = await res.json()
       if (!res.ok) {
@@ -38,7 +36,7 @@ export default function ModifierProfilPage() {
         return
       }
       login(data, token!)
-      Alert.alert('Succès', 'Profil modifié avec succès')
+      Alert.alert('Succès', 'Mot de passe modifié avec succès')
       router.back()
     } catch {
       setErreur('Erreur serveur')
@@ -51,34 +49,13 @@ export default function ModifierProfilPage() {
         <Text style={styles.retourText}>← Retour</Text>
       </TouchableOpacity>
 
-      <Text style={styles.titre}>Modifier mon profil</Text>
+      <Text style={styles.titre}>Modifier mon mot de passe</Text>
       {erreur ? <Text style={styles.erreur}>{erreur}</Text> : null}
 
-      <TextInput
-        style={styles.input}
-        placeholder='Prénom'
-        value={prenom}
-        onChangeText={setPrenom}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder='Nom'
-        value={nom}
-        onChangeText={setNom}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder='Email'
-        value={email}
-        onChangeText={setEmail}
-        keyboardType='email-address'
-        autoCapitalize='none'
-      />
-      
       <View style={styles.passwordContainer}>
         <TextInput
           style={styles.input}
-          placeholder='Nouveau mot de passe (laisser vide pour ne pas changer)'
+          placeholder='Nouveau mot de passe'
           value={motDePasse}
           onChangeText={setMotDePasse}
           secureTextEntry={!showPassword}
@@ -94,7 +71,7 @@ export default function ModifierProfilPage() {
           />
         </TouchableOpacity>
       </View>
-      
+
       <View style={styles.passwordContainer}>
         <TextInput
           style={styles.input}
