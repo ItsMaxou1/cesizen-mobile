@@ -4,17 +4,29 @@ Application mobile du projet **CESIZen**, une application de gestion du stress e
 
 Construite avec **React Native**, **Expo** et **TypeScript**.
 
+Campagne minimale avant toute livraison
+Avant chaque démonstration ou livraison, les étapes suivantes doivent être validées :
+
+    1. Ouvrir l'application mobile — vérifier l'affichage de l'accueil (exercices + contenus)
+    2. Ouvrir la liste des exercices — vérifier les filtres par catégorie
+    3. Lancer un exercice — vérifier l'animation (bulle ou barre selon le type)
+    4. Se connecter — vérifier l'accès au profil avec nom/prénom/email
+    5. Ajouter un exercice en favori — vérifier la présence dans le profil
+    6. Consulter un contenu informatif — vérifier les likes et commentaires
+    7. Se connecter au back-office admin — vérifier l'accès au dashboard
+    8. Se déconnecter depuis l'app mobile
+
 ---
 
 ## Présentation du projet
 
 CESIZen est composé de 3 projets :
 
-| Projet | Description | Lien |
-|--------|-------------|------|
-| **cesizen-api** | Backend REST | [Repo](https://github.com/ItsMaxou1/cesizen-api) |
-| **cesizen-web** | Interface admin (React) | [Repo](https://github.com/ItsMaxou1/cesizen-web) |
-| **cesizen-mobile** (ce repo) | Application mobile (Expo) | - |
+| Projet                       | Description               | Lien                                             |
+| ---------------------------- | ------------------------- | ------------------------------------------------ |
+| **cesizen-api**              | Backend REST              | [Repo](https://github.com/ItsMaxou1/cesizen-api) |
+| **cesizen-web**              | Interface admin (React)   | [Repo](https://github.com/ItsMaxou1/cesizen-web) |
+| **cesizen-mobile** (ce repo) | Application mobile (Expo) | -                                                |
 
 > L'API doit être lancée avant de démarrer l'application mobile.
 
@@ -48,6 +60,7 @@ export const API_URL = "http://TON_IP:3001";
 > Utiliser l'IP locale de ta machine sur le réseau (ex: `192.168.1.42`).
 
 Pour trouver ton IP locale :
+
 - Windows : taper `ipconfig` dans le terminal → chercher **Adresse IPv4**
 - Mac/Linux : taper `ifconfig` → chercher `inet`
 
