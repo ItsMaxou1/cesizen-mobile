@@ -38,11 +38,10 @@ export default function IndexPage() {
   const load = async () => {
     const resEx = await fetch(`${API_URL}/api/exercices`)
     const dataEx = await resEx.json()
-    const exSlice = dataEx.slice(0, 3)
-    setExercices(exSlice)
+    setExercices(Array.isArray(dataEx) ? dataEx : [])
 
     const likesData: { [key: number]: number } = {}
-    for (const ex of exSlice) {
+    for (const ex of (Array.isArray(dataEx) ? dataEx : [])) {
       const res = await fetch(`${API_URL}/api/likes/exercice/${ex.id}`)
       const data = await res.json()
       likesData[ex.id] = data.count
@@ -51,11 +50,10 @@ export default function IndexPage() {
 
     const resCo = await fetch(`${API_URL}/api/contenus`)
     const dataCo = await resCo.json()
-    const coSlice = dataCo.slice(0, 3)
-    setContenus(coSlice)
+    setContenus(Array.isArray(dataCo) ? dataCo : [])
 
     const likesDataCo: { [key: number]: number } = {}
-    for (const co of coSlice) {
+    for (const co of (Array.isArray(dataCo) ? dataCo : [])) {
       const res = await fetch(`${API_URL}/api/likes/contenu/${co.id}`)
       const data = await res.json()
       likesDataCo[co.id] = data.count
@@ -105,11 +103,11 @@ export default function IndexPage() {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Exercices de respiration :</Text>
-        <View style={styles.grid}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
           {exercices.map(ex => (
             <TouchableOpacity
               key={ex.id}
-              style={styles.card}
+              style={styles.cardHorizontal}
               onPress={() => router.push(`/exercice/${ex.id}`)}
             >
               <Text style={styles.cardTitle}>{ex.titre}</Text>
@@ -121,16 +119,16 @@ export default function IndexPage() {
               </TouchableOpacity>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Contenus informatifs :</Text>
-        <View style={styles.grid}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
           {contenus.map(co => (
             <TouchableOpacity
               key={co.id}
-              style={styles.card}
+              style={styles.cardHorizontal}
               onPress={() => router.push(`/contenu/${co.id}`)}
             >
               <Text style={styles.cardTitle}>{co.titre}</Text>
@@ -141,7 +139,7 @@ export default function IndexPage() {
               </TouchableOpacity>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </View>
     </ScrollView>
   )
@@ -191,6 +189,16 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     width: '31%',
+  },
+  cardHorizontal: {
+    backgroundColor: '#7ECECA',
+    borderRadius: 12,
+    padding: 12,
+    width: 120,
+    marginRight: 8,
+  },
+  horizontalScroll: {
+    flexDirection: 'row',
   },
   cardTitle: {
     fontSize: 13,
