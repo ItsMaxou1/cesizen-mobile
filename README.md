@@ -34,7 +34,7 @@ CESIZen est composé de 3 projets :
 
 ## Prérequis
 
-- [Node.js](https://nodejs.org/) v18+
+- [Node.js](https://nodejs.org/) v24+
 - npm
 - [Expo Go](https://expo.dev/go) installé sur ton téléphone (iOS ou Android)
 - L'[API CESIZen](https://github.com/ItsMaxou1/cesizen-api) lancée et accessible sur le réseau local
